@@ -1,6 +1,7 @@
 # Contains useful activation functions
 # - ReLU (Rectified Linear)
 # - Softmax
+# - Sigmoid
 
 import numpy as np
 
@@ -16,6 +17,9 @@ class ReLU:
     def backward(self, dvalues):
         self.dinputs = dvalues.copy()
         self.dinputs[self.inputs <= 0] = 0
+
+    def predictions(self, outputs):
+        return outputs
 
 # Softmax activation
 class Softmax:
@@ -35,6 +39,19 @@ class Softmax:
             jacobian = np.diagflat(single_output) - np.dot(single_output, single_output.T)
             self.dinputs[i] = np.dot(jacobian, single_dvalues)
 
+    def predictions(self, outputs):
+        return np.argmax(outputs, axis=1)
+
+# Sigmoid activation
+class Sigmoid:
+    def forward(self, inputs):
+        self.inputs = inputs
+        self.output = 1/(1 + np.exp(-inputs))
+
+    def backward(self, dvalues):
+        self.dinputs = dvalues * (1 - self.output) * self.output
     
-            
-        
+    def predictions(self, outputs):
+        return (outputs > 0.5) * 1
+
+

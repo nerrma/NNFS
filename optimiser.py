@@ -109,7 +109,6 @@ class RMSprop:
         self.iterations += 1
 
 # Adam optimiser
-
 class Adam:
 
     # Constructor
