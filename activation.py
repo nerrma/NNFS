@@ -8,7 +8,7 @@ import numpy as np
 # ReLU activation
 class ReLU:
     # Forward pass
-    def forward(self, inputs):
+    def forward(self, inputs, training):
         self.inputs = inputs
         # ReLU through using maximum
         self.output = np.maximum(0,inputs)
@@ -24,7 +24,7 @@ class ReLU:
 # Softmax activation
 class Softmax:
     # Foward pass
-    def foward(self, inputs):
+    def forward(self, inputs, training):
         self.inputs = inputs
         exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
         probabilites = exp_values / np.sum(exp_values, axis=1, keepdims=True)
@@ -44,7 +44,7 @@ class Softmax:
 
 # Sigmoid activation
 class Sigmoid:
-    def forward(self, inputs):
+    def forward(self, inputs, training):
         self.inputs = inputs
         self.output = 1/(1 + np.exp(-inputs))
 

@@ -4,6 +4,8 @@
 # - RMSprop
 # - Adam
 
+import numpy as np
+
 # SGD implemetation
 class SGD:
 
@@ -84,6 +86,7 @@ class RMSprop:
         self.current_lr = learning_rate
         self.decay = decay
         self.epsilon = epsilon
+        self.iterations = 0
         self.rho = rho
 
     # Call before parameter updates
@@ -116,6 +119,7 @@ class Adam:
         self.learning_rate = learning_rate
         self.current_lr = learning_rate
         self.decay = decay
+        self.iterations = 0
         self.epsilon = epsilon
         self.beta_1 = beta_1
         self.beta_2 = beta_2
@@ -132,7 +136,6 @@ class Adam:
             layer.weight_momentums = np.zeros_like(layer.biases)
             layer.bias_cache = np.zeros_like(layer.biases)
             layer.bias_momentums = np.zeros_like(layer.biases)
-      
         # Update momentums with current gradients
         layer.weight_momentums = self.beta_1 * layer.weight_momentums + (1 - self.beta_1) * layer.dweights
         layer.bias_momentums = self.beta_1 * layer.bias_momentums + (1 - self.beta_1) * layer.dbiases

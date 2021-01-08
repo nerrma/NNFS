@@ -1,7 +1,7 @@
-# Class to represent a dense layer
 import numpy as np
 
-class Layer_Dense:
+# Class to represent a dense layer
+class Dense:
     # Constructor (w_reg_lambda, b_reg_lambda = [L1, L2])
     def __init__(self, n_inputs, n_neurons, w_reg_lambda, b_reg_lambda):
         self.weights = 0.01 * np.random.randn(n_inputs, n_neurons)
@@ -10,7 +10,7 @@ class Layer_Dense:
         self.b_reg_lambda = b_reg_lambda
 
     # Forward pass through layer
-    def forward(self, inputs):
+    def forward(self, inputs, training):
         self.inputs = inputs
         self.output = np.dot(inputs, self.weights) + self.biases
 
@@ -45,14 +45,23 @@ class Dropout:
     def __init__(self, rate):
         self.rate = 1 - rate
 
-    def forward(self, inputs):
+    def forward(self, inputs, training):
         self.inputs = inputs
+
+        if not training:
+            self.output = inputs.copy()
+            return
 
         # Generate random zeros for dropout step
         self.binary_mask = np.random.binomial(1, self.rate, size=inputs.shape) / self.rate
 
         # Perform dropout
-        self.output = inputs * binary_mask
+        self.output = inputs * self.binary_mask
 
     def backward(self, dvalues):
-        self.dinputs = dvalues * binary_mask
+        self.dinputs = dvalues * self.binary_mask
+
+# Input layer (for training implementation, only stores training data)
+class Input:
+    def forward(self, inputs, training):
+        self.output = inputs
