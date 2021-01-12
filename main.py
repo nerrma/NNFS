@@ -1,6 +1,8 @@
+import matplotlib.pyplot as plt
 import nnfs
 import numpy as np
 from nnfs.datasets import spiral_data
+import os
 
 import accuracy
 import activation
@@ -12,6 +14,8 @@ import optimiser
 nnfs.init()
 
 X, y = spiral_data(samples=1000, classes=3)
+
+
 X_test, y_test = spiral_data(samples=100, classes=3)
 
 model = model.Model()
@@ -29,5 +33,21 @@ model.set(loss=loss.CategorialCrossEntropy(),
 
 model.finalise()
 
-model.train(X, y, validation_data=(X_test, y_test), epochs=100, print_every=1)
+parameters = model.get_params()
+
+if os.path.exists('model_params'):
+    model.load_params('model_params')
+
+output = model.train(X, y, validation_data=(X_test, y_test), epochs=1, print_every=10)
+model.save_params('model_params')
+
+# output = output.reshape(3, 3000)
+print(output)
+
+
+#plt.contourf(X[:, 0], X[:, 1], Z, levels=output, cmap='brg')
+plt.scatter(X[:, 0], X[:, 1], c=y, s=40, cmap='brg')
+plt.scatter(X[:, 0], X[:, 1], alpha=0.3, c=output, s=40, cmap='brg')
+plt.show()
+
 

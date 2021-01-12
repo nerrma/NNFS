@@ -1,7 +1,11 @@
+import pickle
+
+import numpy as np
+
+import activation
 import layer
 import loss
-import activation
-import numpy as np
+
 
 # Model class to store models easily
 class Model:
@@ -15,9 +19,14 @@ class Model:
 
     # Set a form of loss and optimisation
     def set(self, *, loss, optimiser, accuracy):
-        self.loss = loss
-        self.optimiser = optimiser
-        self.accuracy = accuracy
+        if loss is not None:
+            self.loss = loss
+
+        if optimiser is not None:
+            self.optimiser = optimiser
+
+        if accuracy is not None:
+            self.accuracy = accuracy
 
     def train(self, X, y, *, epochs=1, print_every=1, validation_data=None):
         self.accuracy.init(y)
@@ -28,6 +37,7 @@ class Model:
             loss = data_loss + reg_loss
             
             predictions = self.output_layer_activation.predictions(output)
+            save_predictions = predictions
             accuracy = self.accuracy.calculate(predictions, y)
 
             self.backward(output, y)
@@ -60,8 +70,8 @@ class Model:
             print(f'validation, ' +
                 f'acc: {accuracy:.3f}, ' +
                 f'loss: {loss:.3f}')
-
-
+    
+        return save_predictions 
     
     def finalise(self):
         self.input_layer = layer.Input()
@@ -84,7 +94,8 @@ class Model:
             if hasattr(self.layers[i], 'weights'):
                 self.trainable_layers.append(self.layers[i])
 
-        self.loss.remember_trainable_layers(self.trainable_layers)
+        if self.loss is not None:
+            self.loss.remember_trainable_layers(self.trainable_layers)
 
         if isinstance(self.layers[-1], activation.Softmax) and isinstance(self.loss, loss.CategorialCrossEntropy):
             self.softmax_classifier_output = Softmax_Loss_CatCross()
@@ -111,6 +122,26 @@ class Model:
 
         for layer in reversed(self.layers):
             layer.backward(layer.next.dinputs)
+
+    def get_params(self):
+        parameters = []
+        
+        for layer in self.trainable_layers:
+            parameters.append(layer.get_params())
+
+        return parameters
+
+    def set_params(self, params):
+        for parameter_set, layer in zip(params, self.trainable_layers):
+            layer.set_params(*parameter_set)
+        
+    def save_params(self, path):
+        with open(path, 'wb') as f:
+            pickle.dump(self.get_params(), f)
+    
+    def load_params(self, path):
+        with open(path, 'rb') as f:
+            self.set_params(pickle.load(f))
 
 class Softmax_Loss_CatCross():
     def backward(self, dvalues, y_true):

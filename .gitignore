@@ -1,3 +1,4 @@
 # Ignore Python env
 env0/
 __pycache__/
+model_params
