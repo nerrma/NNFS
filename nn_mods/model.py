@@ -2,9 +2,7 @@ import pickle
 
 import numpy as np
 
-import activation
-import layer
-import loss
+from nn_mods import activation, layer, loss
 
 
 # Model class to store models easily

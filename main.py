@@ -4,12 +4,7 @@ import numpy as np
 from nnfs.datasets import spiral_data
 import os
 
-import accuracy
-import activation
-import layer
-import loss
-import model
-import optimiser
+from nn_mods import accuracy, activation, layer, loss, model, optimiser
 
 nnfs.init()
 
