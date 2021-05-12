@@ -33,7 +33,7 @@ parameters = model.get_params()
 if os.path.exists('model_params'):
     model.load_params('model_params')
 
-output = model.train(X, y, validation_data=(X_test, y_test), epochs=1, print_every=10)
+output = model.train(X, y, validation_data=(X_test, y_test), epochs=50, print_every=10)
 model.save_params('model_params')
 
 # output = output.reshape(3, 3000)
@@ -41,8 +41,8 @@ print(output)
 
 
 #plt.contourf(X[:, 0], X[:, 1], Z, levels=output, cmap='brg')
-plt.scatter(X[:, 0], X[:, 1], c=y, s=40, cmap='brg')
-plt.scatter(X[:, 0], X[:, 1], alpha=0.3, c=output, s=40, cmap='brg')
+plt.scatter(X[:, 0], X[:, 1], alpha=0.5, c=y, s=40, cmap='brg')
+plt.scatter(X[:, 0], X[:, 1], alpha=0.5, c=output, s=40, cmap='brg')
 plt.show()
 
 
