@@ -27,12 +27,13 @@ Created following the book [Neural Networks from Scratch](https://nnfs.io/)
 	- RMSprop - Rolling Mean Squared propagation.
 	- Adam - Adaptive Momentum.
 
+---
 
 **`main.py`** includes an example use of the neural network.
 
 It classifies a scatter plot of 3 classes as so:
-<center>
-	<img src="Figure_1.png" alt="drawing" width="300"/>
-</center>
 
+<p align="center">
+	<img width="300" src="Figure_1.png" alt="Figure 1">
+</p>
 
